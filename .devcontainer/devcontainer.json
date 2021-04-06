@@ -1,0 +1,38 @@
+{
+	"name": "Flask back-end dev",
+	"dockerComposeFile": [
+		"../docker-compose.yml"
+	],
+	"service": "flask",
+	"workspaceFolder": "/flask",
+	"settings": {
+		"terminal.integrated.shell.linux": null,
+		"python.linting.pylintEnabled": true,
+		"python.linting.enabled": true,
+		"python.formatting.provider": "autopep8",
+		"python.pythonPath": "/usr/local/bin/python",
+		"launch": {
+			"version": "0.2.0",
+			"configurations": [
+				{
+					"name": "Python: Flask",
+					"type": "python",
+					"request": "launch",
+					"module": "flask",
+					"env": {
+						"FLASK_APP": "app",
+						"FLASK_ENV": "development"
+					},
+					"args": [
+						"run",
+						"--no-debugger"
+					],
+					"jinja": true
+				}
+			]
+		}
+	},
+	"extensions": ["ms-python.python"],
+	"shutdownAction": "none",
+	"remoteUser": "dev"
+}
