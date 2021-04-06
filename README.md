@@ -1,4 +1,4 @@
-# kpz2021-testbed
+# AIIR back
 ## Development
 Create `.env` file from `.env.example`
 ```bash
