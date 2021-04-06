@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  flask:
+    build: 
+      context: .
+      args: 
+        USER_UID: $DEV_UID
+        USER_GID: $DEV_GID
+    user: ${DEV_UID}:${DEV_GID}
+    tty: true
+    env_file:
+      - .env
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/flask
+    
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - 3306:3306
