@@ -33,6 +33,6 @@
 		}
 	},
 	"extensions": ["ms-python.python"],
-	"shutdownAction": "none",
+	"shutdownAction": "stopCompose",
 	"remoteUser": "dev"
 }
