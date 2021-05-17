@@ -1,15 +1,25 @@
 from flask import Flask
 from flask_restx import Resource, Api, reqparse, inputs
+import os
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 api = Api(app)
 
+def searchIn(logFilename):
+    pathToFile = os.getcwd() + "/logs/" + logFilename
+    if os.path.isfile(pathToFile):
+        logFile = open(pathToFile, "r")
+        content = logFile.read() # temporary, to delete when apache works
+        return content     # temporary, to delete when apache works
+    return ""
+    #apache.search(pathToFile)
 
 def generate_sample_results(limit):
     results = []
     for i in range(limit):
         results.append({'index': i, 'log': 'This is sample result ' + str(i)})
+    results.append(searchIn("generated.log"))
     return results
 
 
@@ -42,7 +52,8 @@ class LogsSearch(Resource):
             'to_date': to_date_str,
             'results': generate_sample_results(args['limit'])
         }
-        return response
+
+        return response, 200, {"Access-Control-Allow-Origin": "*"}
 
 
 if __name__ == '__main__':
