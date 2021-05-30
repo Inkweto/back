@@ -1,4 +1,3 @@
-# pylint: disable=import-error
 import random
 from pyspark import SparkContext
 
