@@ -1,5 +1,7 @@
-from flask import Flask
+import flask.scaffold
+flask.helpers._endpoint_from_view_func = flask.scaffold._endpoint_from_view_func
 from flask_restx import Resource, Api, reqparse, inputs
+from flask import Flask
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
@@ -46,4 +48,4 @@ class LogsSearch(Resource):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
