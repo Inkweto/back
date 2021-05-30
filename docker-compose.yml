@@ -7,6 +7,10 @@ services:
         USER_UID: $DEV_UID
         USER_GID: $DEV_GID
     user: ${DEV_UID}:${DEV_GID}
+    environment:
+      - ENABLE_INIT_DAEMON=false
+      - "SPARK_APPLICATION_PYTHON_LOCATION=/flask/pi.py"
+      - "SPARK_MASTER_NAME=spark-m"
     tty: true
     ports:
       - 5000:5000
@@ -23,3 +27,27 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - 3306:3306
+
+  spark-m:
+    image: bde2020/spark-master:3.1.1-hadoop3.2
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    environment:
+      - ENABLE_INIT_DAEMON=false
+  spark-w1:
+    image: bde2020/spark-worker:3.1.1-hadoop3.2
+    depends_on:
+      - spark-m
+    ports:
+      - "8081:8081"
+    environment:
+      - "SPARK_MASTER=spark://spark-m:7077"
+  spark-w2:
+    image: bde2020/spark-worker:3.1.1-hadoop3.2
+    depends_on:
+      - spark-m
+    ports:
+      - "8082:8081"
+    environment:
+      - "SPARK_MASTER=spark://spark-m:7077"

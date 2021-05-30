@@ -6,7 +6,6 @@
 	"service": "flask",
 	"workspaceFolder": "/flask",
 	"settings": {
-		"terminal.integrated.shell.linux": null,
 		"python.linting.pylintEnabled": true,
 		"python.linting.enabled": true,
 		"python.formatting.provider": "autopep8",
