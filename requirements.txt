@@ -1,4 +1,6 @@
 Flask
 flask-restx
+flask-sqlalchemy
+gevent==1.1b5
 python-dotenv
 pyspark

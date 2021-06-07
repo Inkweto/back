@@ -3,10 +3,15 @@ import flask.scaffold
 flask.helpers._endpoint_from_view_func = flask.scaffold._endpoint_from_view_func
 from flask_restx import Resource, Api, reqparse, inputs
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+
 app.config.from_pyfile('config.py')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://username:password@server/db'
+
 api = Api(app)
+db = SQLAlchemy(app)
 
 def searchIn(logFilename):
     pathToFile = os.getcwd() + "/logs/" + logFilename
