@@ -27,9 +27,6 @@ lsns = api.namespace('logs-search', description='Log search namespace')
 search_parser = reqparse.RequestParser()
 search_parser.add_argument('contains', type=str, help='Search phrase')
 search_parser.add_argument('limit', type=int, default=20)
-search_parser.add_argument('from_date', type=inputs.datetime_from_iso8601)
-search_parser.add_argument('to_date', type=inputs.datetime_from_iso8601)
-
 
 @lsns.route('/')
 class LogsSearch(Resource):
@@ -37,22 +34,10 @@ class LogsSearch(Resource):
     def get(self):
         args = search_parser.parse_args()
 
-        from_date_str = 'Not provided'
-        to_date_str = 'Not provided'
-
-        if args['from_date']:
-            from_date_str = args['from_date'].strftime('%m/%d/%Y, %H:%M:%S')
-        if args['to_date']:
-            to_date_str = args['to_date'].strftime('%m/%d/%Y, %H:%M:%S')
-
         log_filename = 'generated.log'
         result_id = searchIn(log_filename)
 
         response = {
-            'contains': args['contains'],
-            'limit': args['limit'],
-            'from_date': from_date_str,
-            'to_date': to_date_str,
             'result_id': result_id
         }
 
@@ -68,7 +53,7 @@ log_result_post.add_argument('date', type=inputs.datetime_from_iso8601)
 log_result_post.add_argument('content', type=str)
 
 log_result_get = reqparse.RequestParser()
-log_result_post.add_argument('id', type=int)
+log_result_get.add_argument('id', type=int)
 
 @log_result_api.response(400, 'Parameters not provided')
 @log_result_api.route('/')
@@ -102,8 +87,8 @@ class Result(Resource):
 
         if args['id']:
             #log_result = get_element_with_id(id)
-            return {'msg': 'log_result(result can be in database or not yet)'}, 200
-        return {'msg': 'Parameters not provided'}, 400
+            return {'msg': 'log_result(result can be in database or not yet)'}, 200, {"Access-Control-Allow-Origin": "*"}
+        return {'msg': 'Parameters not provided'}, 400, {"Access-Control-Allow-Origin": "*"}
 
         
 
