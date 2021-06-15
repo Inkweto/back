@@ -57,9 +57,6 @@ log_result_api = api.namespace('result', description='Log result namespace')
 
 log_result_post = reqparse.RequestParser()
 log_result_post.add_argument('id', type=int)
-log_result_post.add_argument('search_phrase', type=str)
-log_result_post.add_argument('line', type=str)
-log_result_post.add_argument('date', type=inputs.datetime_from_iso8601)
 log_result_post.add_argument('content', type=str)
 
 log_result_get = reqparse.RequestParser()
@@ -74,11 +71,8 @@ class Result(Resource):
     def post(self): # for spark to send result
         args = log_result_post.parse_args()
 
-        if args['id'] and args['search_phrase'] and args['line'] and args['date'] and args['content']:
+        if args['id'] and args['content']:
             search_id = args['id']
-            search_phrase = args['search_phrase']
-            line = args['line'] 
-            date = args['date'] 
             content = args['content']
             # created = update_element_with_id(search_id, search_phrase, line, date, content)
 
@@ -96,9 +90,11 @@ class Result(Resource):
         args = log_result_get.parse_args()
 
         if args['id']:
+
             #log_result = get_element_with_id(id)
             return {'msg': 'log_result(result can be in database or not yet)'}, 200, {"Access-Control-Allow-Origin": "*"}
         return {'msg': 'Parameters not provided'}, 400, {"Access-Control-Allow-Origin": "*"}
+
 
         
 

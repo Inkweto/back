@@ -38,6 +38,7 @@ RUN addgroup --gid $USER_GID $USERNAME && \
 # Workspace
 RUN mkdir ${WORKSPACE} && chown -R ${USER_UID}:${USER_GID} ${WORKSPACE}
 WORKDIR ${WORKSPACE}
+RUN apk add alpine-sdk
 
 EXPOSE 5000
 CMD ["/bin/bash"]
