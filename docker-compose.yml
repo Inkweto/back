@@ -9,7 +9,7 @@ services:
     user: ${DEV_UID}:${DEV_GID}
     environment:
       - ENABLE_INIT_DAEMON=false
-      - "SPARK_APPLICATION_PYTHON_LOCATION=/flask/pi.py"
+      - "SPARK_APPLICATION_PYTHON_LOCATION=/flask/search.py"
       - "SPARK_MASTER_NAME=spark-m"
     tty: true
     ports:
@@ -35,6 +35,10 @@ services:
       - "7077:7077"
     environment:
       - ENABLE_INIT_DAEMON=false
+    volumes:
+      - ./logs:/log_data_flask
+
+
   spark-w1:
     image: bde2020/spark-worker:3.1.1-hadoop3.2
     depends_on:
@@ -51,3 +55,4 @@ services:
       - "8082:8081"
     environment:
       - "SPARK_MASTER=spark://spark-m:7077"
+    
