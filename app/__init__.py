@@ -18,10 +18,10 @@ def searchIn(logFilename):
         return result_id
     return -1  
 
-def run_script_with_args(contains, limit):
+def run_script_with_args(contains, limit, result_id):
     spark_env = os.environ.copy()
     spark_env['SPARK_APPLICATION_PYTHON_LOCATION'] = '/flask/search.py'
-    spark_env['SPARK_APPLICATION_ARGS'] = '"' + contains + '"' + ' ' + str(limit)
+    spark_env['SPARK_APPLICATION_ARGS'] = '"' + contains + '"' + ' ' + str(limit) + ' ' + str(result_id)
     subprocess.Popen('/submit.sh', env=spark_env)
 
 
@@ -44,7 +44,7 @@ class LogsSearch(Resource):
 
         log_filename = 'generated.log'
         result_id = searchIn(log_filename)
-        run_script_with_args(args['contains'], args['limit'])
+        run_script_with_args(args['contains'], args['limit'], result_id)
 
         response = {
             'msg': 'Script submited!',
