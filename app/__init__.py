@@ -1,4 +1,5 @@
 import os
+import subprocess
 import flask.scaffold
 flask.helpers._endpoint_from_view_func = flask.scaffold._endpoint_from_view_func
 from flask_restx import Resource, Api, reqparse, inputs
@@ -17,6 +18,13 @@ def searchIn(logFilename):
         return result_id
     return -1  
 
+def run_script_with_args(contains, limit):
+    spark_env = os.environ.copy()
+    spark_env['SPARK_APPLICATION_PYTHON_LOCATION'] = '/flask/search.py'
+    spark_env['SPARK_APPLICATION_ARGS'] = '"' + contains + '"' + ' ' + str(limit)
+    subprocess.Popen('/submit.sh', env=spark_env)
+
+
 def generate_sample_results(limit):
     results = []
     for i in range(limit):
@@ -31,14 +39,15 @@ search_parser.add_argument('limit', type=int, default=20)
 @lsns.route('/')
 class LogsSearch(Resource):
     @lsns.expect(search_parser)
-    def get(self):
+    def post(self):
         args = search_parser.parse_args()
 
-        log_filename = 'generated.log'
-        result_id = searchIn(log_filename)
+        #log_filename = 'generated.log'
+        #result_id = searchIn(log_filename)
+        run_script_with_args(args['contains'], args['limit'])
 
         response = {
-            'result_id': result_id
+            'msg': 'Script submited!'#'result_id': result_id
         }
 
         return response, 200, {"Access-Control-Allow-Origin": "*"}
