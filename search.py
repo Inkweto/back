@@ -43,40 +43,23 @@ def parse_apache_log_line(logline):
         content_size  = int(match.group(9))
     )
 
-# .cache() - Persists the RDD in memory, which will be re-used again
-access_logs = (sc.textFile(logFile)
-               .map(parse_apache_log_line)
-               .cache())
+# # .cache() - Persists the RDD in memory, which will be re-used again
+# access_logs = (sc.textFile(logFile)
+#                .map(parse_apache_log_line)
+#                .cache())
 
-schema_access_logs = sqlContext.createDataFrame(access_logs)
-#Creates a table on which SQL like queries can be fired for analysis
-schema_access_logs.registerTempTable("logs")
+# schema_access_logs = sqlContext.createDataFrame(access_logs)
+# #Creates a table on which SQL like queries can be fired for analysis
+# schema_access_logs.registerTempTable("logs")
 
-endpointsSearch = (sqlContext
-                .sql("SELECT * FROM logs WHERE endpoint=" + argv[1])
-                .rdd.map(lambda row: (row[0], row[1]))
-                .collect())
-
-
-# def mappingFunc(s):
-#     words = s.split(" ")
-#     return len(words)
-
-# base_df = spark.read.text(raw_data_files)
-# base_df.printSchema()
-
-# # view the type of data structure holding our log data using the following code: pyspark.sql.dataframe.DataFrame
-# type(base_df)
-
-# base_df_rdd = base_df.rdd
-# type(base_df_rdd) #pyspark.rdd.RDD
-
-# base_df_rdd.map(mappingFunc)
-
+# endpointsSearch = (sqlContext
+#                 .sql("SELECT * FROM logs WHERE endpoint=" + argv[1])
+#                 .rdd.map(lambda row: (row[0], row[1]))
+#                 .collect())
 
 url = 'http://localhost:5000/result/'
 
-myobj = {'id': argv[0],
+myobj = {'id': argv[3],
          'content': 'endpointsSearch'}
 
 

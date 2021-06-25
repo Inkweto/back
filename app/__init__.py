@@ -9,11 +9,11 @@ app = Flask(__name__)
 app.config.from_pyfile('config.py')
 api = Api(app)
 
-def searchIn(logFilename):
+def saveSearch(logFilename):
     pathToFile = os.getcwd() + "/logs/" + logFilename
     if os.path.isfile(pathToFile):
         logFile = open(pathToFile, "r")
-        #apache.search(pathToFile) or some other way to start searching in apache
+        #apache.search(pathToFile) or some other way to start saveSearchg in apache
         result_id = 1
         return result_id
     return -1  
@@ -43,7 +43,7 @@ class LogsSearch(Resource):
         args = search_parser.parse_args()
 
         log_filename = 'generated.log'
-        result_id = searchIn(log_filename)
+        result_id = saveSearch(log_filename)
         run_script_with_args(args['contains'], args['limit'], result_id)
 
         response = {
@@ -62,6 +62,8 @@ log_result_post.add_argument('content', type=str)
 log_result_get = reqparse.RequestParser()
 log_result_get.add_argument('id', type=int)
 
+a = 'ss'
+
 @log_result_api.response(400, 'Parameters not provided')
 @log_result_api.route('/')
 class Result(Resource):
@@ -75,7 +77,7 @@ class Result(Resource):
             search_id = args['id']
             content = args['content']
             # created = update_element_with_id(search_id, search_phrase, line, date, content)
-
+            a = 'sa'
             response = {
                 'msg': 'Result added'
                 #'created': created
@@ -90,11 +92,12 @@ class Result(Resource):
         args = log_result_get.parse_args()
 
         if args['id']:
-
-            #log_result = get_element_with_id(id)
-            return {'msg': 'log_result(result can be in database or not yet)'}, 200, {"Access-Control-Allow-Origin": "*"}
+            log_result = 'test';#get_element_with_id(id)
+            if log_result is None:
+                return {'msg': 'no results yet'}, 200, {"Access-Control-Allow-Origin": "*"}
+            else:
+                return [{'msg': log_result}], 200, {"Access-Control-Allow-Origin": "*"}
         return {'msg': 'Parameters not provided'}, 400, {"Access-Control-Allow-Origin": "*"}
-
 
         
 
